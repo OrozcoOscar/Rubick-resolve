@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script>
+		let ok=[1,2,3,4],ev=0
+		const espera = ms => new Promise(resuelve => setTimeout(resuelve, ms));
+		let data,rt,cruz=0,po=["[0][1]","[1][2]","[2][1]","[1][0]"],nuevoConocimiento;
+	</script>
+<style>
+	body{
+		/*background: black;*/
+	}
+		canvas{
+			border:solid;
+		}
+		button{
+			font-size: 28px;
+		}
+		.c1{
+
+			background-color:blue;
+			color: white;
+			border-radius: 4px;
+			border:none;
+			margin: 4px;
+			width: 34px;
+			height: 32px;
+		}
+		.c2{
+
+			background-color:red;
+			color: white;
+			border-radius: 4px;
+			border:none;
+			margin: 4px;
+			width: 34px;
+			height: 32px;
+		}
+		.c3{
+
+			background-color:green;
+			color: white;
+			border-radius: 4px;
+			border:none;
+			margin: 4px;
+			width: 34px;
+			height: 32px;
+		}
+		.c4{
+
+			background-color:orange;
+			color: white;
+			border-radius: 4px;
+			border:none;
+			margin: 4px;
+			width: 34px;
+			height: 32px;
+		}
+		.c5{
+
+			background-color:yellow;
+			color:gray;
+			border-radius: 4px;
+			border:none;
+			margin: 4px;
+			width: 34px;
+			height: 32px;
+		}
+		.c6{
+
+			background-color:white;
+			color: black;
+			border-radius: 4px;
+			border:solid 1px;
+			margin: 4px;
+			min-width: 34px;
+			height: 32px;
+		}
+		.pasos{
+			float: right;
+			border:solid;
+			min-height: 299px;
+			min-width: 299px;
+			max-height: 400px;
+			display: none;
+			overflow: auto;
+		}
+		input{
+			position: relative;
+			top: -9px;
+			height: 32px;
+			width: 32px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="pasos"></div>
+	<div class="pasos2"></div>
+	<canvas width="600" height="400" id="canvas"></canvas><br>
+	<input type="number" min="20" max="99" value="20" id="nPasos">
+	<button onclick="revolver()" class="c6">Revolver</button>
+	<button onclick="javascript:document.querySelector('.pasos').innerHTML=''" class="c6">Clear</button>
+	<button onclick="javascript:document.querySelector('.pasos').setAttribute('style','display:block')" class="c6">Mostara pasos</button><span id="load"></span><br>
+	<button onclick="rotar(-1,1)" class="c1">⟲</button><button onclick="rotar(1,1)" class="c1">⟳</button>
+	<button onclick="rotar(-1,2)" class="c2">⟲</button><button onclick="rotar(1,2)" class="c2">⟳</button>
+	<button onclick="rotar(-1,3)" class="c3">⟲</button><button onclick="rotar(1,3)" class="c3">⟳</button>
+	<button onclick="rotar(-1,4)" class="c4">⟲</button><button onclick="rotar(1,4)" class="c4">⟳</button>
+	<button onclick="rotar(-1,5)" class="c5">⟲</button><button onclick="rotar(1,5)" class="c5">⟳</button>
+	<button onclick="rotar(-1,6)" class="c6">⟲</button><button onclick="rotar(1,6)" class="c6">⟳</button><br>
+	<button onclick="mover(-1)" class="c6">◄</button>
+	<button onclick="mover(1)" class="c6">►</button>
+	<button onclick="javascript:document.querySelector('.pasos').innerHTML='';resolver()" class="c6">resolver</button>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="core.js"></script>
+	<script type="text/javascript" src="conocimiento/cruz.json"></script>
+	<script>
+		//posiciones de aristas
+	/*	try{
+		let RecuerdoCruz = JSON.parse(rCruz);
+		}catch(e){}
+function sensei() {
+	// body...
+}
+function aprender() {
+	let mov=document.querySelector(".pasos").children,movimientos="",archivo="";
+	let clases=[];
+			for (var i = 0; i <mov.length; i+=2) {
+				clases.push(mov[i].className)
+			}
+			 scanearBlancos()
+	nuevoConocimiento=",{"
+		+"'data':"+data+","
+		+"'algoritmo':"+movimientos
+		"}";
+		console.log(clases,nuevoConocimiento)
+	$.ajax({
+		type:"POST",
+		url:"aprender.php",
+		data:{"archivo":archivo,"data":nuevoConocimiento},
+		success:(e)=>{
+
+		}
+		})
+}*/
+let solve=false;
+function resolver() {
+		if (cruz<4) {
+			solve=false;
+			armarCruz()
+		}else if(c6[0][2]!=6 ||  c6[0][0]!=6 || c6[2][0]!=6 || c6[2][2]!=6){
+			ArmarCaraBlanca()
+		}
+		else{
+			cruz=scanearBlancos();
+			solve=true;
+			filtro()
+		}
+		
+		if(!solve)espera(1200).then(() => resolver() );
+}
+function getDataEsquina() {
+	let s=[]
+	for (var i = 0; i < cubo.length; i++) {
+		eval(Esquina(i+1,6));
+	}
+	return s;
+}
+let contR=0,evtemp=ev;
+function ArmarCaraBlanca() {
+	data=getDataEsquina()
+	let condicion="data[ev][2][0]!=data[ev][2][1]&&data[ev][3][0]!=data[ev][3][1]";
+	if(ev>3)ev=0
+	setTimeout(()=>{
+			if(data[ev][1][0]==5){
+				console.log("a",ev)
+				
+				if(data[ev][2][0]==data[ev][3][1]&&data[ev][3][0]==data[ev][2][1]){
+					if(data[ev][0].toString()=="0,2" || data[ev][0].toString()=="2,2"){
+						rotar(1,data[ev][2][0])
+						rotar(1,5)
+						rotar(1,5)
+						rotar(-1,data[ev][2][0])
+						rotar(1,5)
+
+					}else if(data[ev][0].toString()=="2,0" || data[ev][0].toString()=="0,0"){
+						rotar(-1,data[ev][2][0])
+						rotar(1,5)
+						rotar(1,5)
+						rotar(1,data[ev][2][0])
+						rotar(1,5)
+
+					}
+					
+				}else{
+					rotar(1,5)
+				}
+				ev++;
+			}
+			else if(data[ev][1].toString()=="6,6" && eval(condicion)){
+				console.log("b",ev)
+				if(data[ev][0].toString()=="0,0" || data[ev][0].toString()=="2,2"){
+					rotar(-1,data[ev][3][0])
+					rotar(1,5)
+					rotar(1,data[ev][3][0])
+					rotar(-1,5)
+				}
+				if(data[ev][0].toString()=="0,2" || data[ev][0].toString()=="2,0"){
+					rotar(1,data[ev][3][0])
+					rotar(1,5)
+					rotar(-1,data[ev][3][0])
+					rotar(-1,5)
+				}
+		
+				ev++;
+
+			}
+			else if((data[ev][0].toString()=="0,2" || data[ev][0].toString()=="0,0") && eval(condicion)){
+				console.log("c",ev)
+				rotar(1,5)
+
+				if(data[ev][3][0]==data[ev][3][1] && data[ev][2][0]!=data[ev][2][1]){
+					ev++;
+				}else{
+					if(evtemp==ev)contR++;
+					else{
+						evtemp=ev
+						contR=0
+					}
+					
+				}
+				if (contR>3) {
+					ev++;
+					contR=0;
+				}
+				
+			}else if(data[ev][0].toString()=="0,2" && data[ev][3][0]==data[ev][3][1] && data[ev][2][0]!=data[ev][2][1]){
+				console.log("d",ev)
+				rotar(-1,data[ev][3][0])
+				rotar(1,data[ev][2][1])
+				rotar(1,data[ev][3][0])
+				rotar(-1,data[ev][2][1])
+				ev++;
+				
+			}else if(data[ev][0].toString()=="0,0" && data[ev][3][0]==data[ev][3][1] && data[ev][2][0]!=data[ev][2][1]){
+				console.log("d",ev)
+				rotar(1,data[ev][3][0])
+				rotar(-1,data[ev][2][1])
+				rotar(-1,data[ev][3][0])
+				rotar(1,data[ev][2][1])
+				ev++;
+				
+			}else if(data[ev][0].toString()=="2,2" && (eval(condicion) ||(data[ev][2][0]==data[ev][2][1] || data[ev][3][0]==data[ev][3][1])) && data[ev][1].toString()!="6,6"){
+				console.log("e",ev)
+				rotar(-1,data[ev][1][0])
+				rotar(1,5)
+				rotar(1,5)
+				rotar(1,data[ev][1][0])
+				rotar(-1,5)
+				ev++;
+			}
+			else if(data[ev][0].toString()=="2,0" &&( eval(condicion) || (data[ev][2][0]==data[ev][2][1] || data[ev][3][0]==data[ev][3][1])) && data[ev][1].toString()!="6,6"){
+				console.log("f",ev)
+				rotar(1,data[ev][1][0])
+				rotar(-1,5)
+				rotar(-1,5)
+				rotar(-1,data[ev][1][0])
+				rotar(1,5)
+				ev++;
+			}else{
+				ev++;
+			}
+	if(ev>3)ev=0
+	if(data[ev][3][0]==data[ev][3][1] && data[ev][2][0]==data[ev][2][1])ev++;
+	
+
+
+},999)
+
+	
+}
+function Esquina(cara,a) {
+			let s="",esq="";
+				if(eval("c"+cara+"[0][2]"+"=="+a)){
+					let mtemp=eval("m"+cara);
+					let uno=mtemp[0];
+					let dos=mtemp[1];
+					let po=getPo(cara,uno,dos)
+					esq ="[0,2],["+cara+","+a+"],["+uno+","+eval("c"+uno+"["+po.y+"]["+po.x+"]")+"],["+dos+","+eval("c"+dos+"["+po.y_+"]["+po.x_+"]")+"]";
+					s+="s.push(["+esq+"]);"
+
+				}
+				 if(eval("c"+cara+"[2][2]"+"=="+a)){
+					let mtemp=eval("m"+cara);
+					let uno=mtemp[1];
+					let dos=mtemp[2];
+					let po=getPo(cara,uno,dos)
+					esq ="[2,2],["+cara+","+a+"],["+uno+","+eval("c"+uno+"["+po.y+"]["+po.x+"]")+"],["+dos+","+eval("c"+dos+"["+po.y_+"]["+po.x_+"]")+"]";
+					s+="s.push(["+esq+"]);"
+					
+				} 
+				 if(eval("c"+cara+"[0][0]"+"=="+a)){
+					let mtemp=eval("m"+cara);
+					let uno=mtemp[0];
+					let dos=mtemp[3];
+					let po=getPo(cara,uno,dos)
+					esq ="[0,0],["+cara+","+a+"],["+uno+","+eval("c"+uno+"["+po.y+"]["+po.x+"]")+"],["+dos+","+eval("c"+dos+"["+po.y_+"]["+po.x_+"]")+"]";
+					s+="s.push(["+esq+"]);"
+					
+				} 
+				 if(eval("c"+cara+"[2][0]"+"=="+a)){
+					let mtemp=eval("m"+cara);
+					let uno=mtemp[3];
+					let dos=mtemp[2];
+					let po=getPo(cara,uno,dos)
+					esq ="[2,0],["+cara+","+a+"],["+uno+","+eval("c"+uno+"["+po.y+"]["+po.x+"]")+"],["+dos+","+eval("c"+dos+"["+po.y_+"]["+po.x_+"]")+"]";
+					s+="s.push(["+esq+"]);"
+					
+				} 
+				
+			
+			
+			return s.substring(0,s.length-1);
+}
+function getPo(cara,uno,dos) {
+	let x,y,x_y_;
+	let muno=eval("m"+uno);
+	let mdos=eval("m"+dos);
+	if(muno.indexOf(dos)==0 || muno.indexOf(cara)==0)y=0;
+	if(muno.indexOf(cara)==1|| muno.indexOf(dos)==1)x=2;
+	if(muno.indexOf(cara)==3|| muno.indexOf(dos)==3)x=0;
+	if(muno.indexOf(dos)==2 || muno.indexOf(cara)==2)y=2;
+
+	if(mdos.indexOf(uno)==0|| mdos.indexOf(cara)==0)y_=0;
+	if(mdos.indexOf(cara)==1|| mdos.indexOf(uno)==1)x_=2;
+	if(mdos.indexOf(cara)==3|| mdos.indexOf(uno)==3)x_=0;
+	if(mdos.indexOf(uno)==2|| mdos.indexOf(cara)==2)y_=2;
+	return {x:x,y:y,x_:x_,y_:y_}
+}
+	</script>
+</body>
+</html>
